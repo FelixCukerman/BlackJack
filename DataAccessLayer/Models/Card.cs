@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Models
 {
-    public class User
+    public class Card
     {
         public int Id { get; set; }
-        public string Nickname { get; set; }
-        public UserRole UserRole { get; set; }
-
+        public Suit Suit { get; set; }
+        public string Value { get; set; }
     }
-
-    public enum UserRole
+    public enum Suit
     {
         None = 0,
-        BotPlayer = 1,
-        PeoplePlayer = 2,
-        Dealer = 3
+        Hearts = 1,
+        Tiles = 2,
+        Clovers = 3,
+        Pikes = 4
     }
 }
