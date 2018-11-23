@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace DataAccessLayer.Models
+namespace EntitiesLayer.Entities
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
+        [Required]
         public string Nickname { get; set; }
+        [Required]
         public UserRole UserRole { get; set; }
-
+        public List<Card> DiscardPile { get; set; }
     }
 
     public enum UserRole
