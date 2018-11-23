@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using DataAccessLayer;
 using EntitiesLayer.Entities;
+using DataAccessLayer.Repositories;
+using DataAccessLayer.Interfaces;
+using System.Threading.Tasks;
 
 namespace PresentationLayer.Controllers
 {
@@ -22,15 +25,16 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public async Task<ActionResult> Contact()
         {
             ViewBag.Message = "Your contact page.";
             using (GameContext db = new GameContext())
             {
-                db.Cards.Add(new Card { Suit = Suit.Pikes, Value = "dama" });
-                db.SaveChanges();
+                IRepository<Card> repository = new CardRepository(db);
+                var card = new Card { Suit = Suit.Hearts, Value = "4" };
+                await repository.Delete(2);
             }
-                return View();
+            return View();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace EntitiesLayer.Entities
         public Suit Suit { get; set; }
         [Required]
         public string Value { get; set; }
-        public User User { get; set; } 
+        public User User { get; set; }
     }
     public enum Suit
     {
