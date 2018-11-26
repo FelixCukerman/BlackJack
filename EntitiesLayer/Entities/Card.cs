@@ -12,20 +12,23 @@ namespace EntitiesLayer.Entities
         [Key]
         public int Id { get; set; }
         [Required]
+        public DateTime DateOfCreation { get; set; }
+        [Required]
         public Suit Suit { get; set; }
         [Required]
         public int Key { get; set; }
         [Required]
         public Value Value { get; set; }
-        public User User { get; set; }
+        public List<User> Users { get; set; }
 
         public Card()
         {
             Id = -1;
+            DateOfCreation = DateTime.Now;
             Suit = Suit.None;
             Key = -1;
             Value = Value.None;
-            User = new User();
+            Users = new List<User>();
         }
     }
     public enum Suit

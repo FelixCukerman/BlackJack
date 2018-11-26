@@ -29,13 +29,25 @@ namespace DataAccessLayer.Repositories
             data.Users.Add(user);
             await data.SaveChangesAsync();
         }
-        public async Task Update(int id, User user)
+        public async Task Update(User user)
         {
-            var item = await data.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var item = await data.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
             item.Nickname = user.Nickname;
             item.UserRole = user.UserRole;
             item.DiscardPile = user.DiscardPile;
             await data.SaveChangesAsync();
+        }
+        public async Task UpdateRange(IEnumerable<User> users)
+        {
+            var userList = users.ToList();
+            for (int i = 0; i < users.Count(); i++)
+            {
+                var item = await data.Users.FirstOrDefaultAsync(x => x.Id == userList[i].Id);
+                item.Nickname = userList[i].Nickname;
+                item.UserRole = userList[i].UserRole;
+                item.DiscardPile = userList[i].DiscardPile;
+                await data.SaveChangesAsync();
+            }
         }
         public async Task Delete(int id)
         {

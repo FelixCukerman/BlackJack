@@ -12,6 +12,8 @@ namespace EntitiesLayer.Entities
         [Key]
         public int Id { get; set; }
         [Required]
+        public DateTime DateOfCreation { get; set; }
+        [Required]
         public string Nickname { get; set; }
         [Required]
         public UserRole UserRole { get; set; }
@@ -19,6 +21,7 @@ namespace EntitiesLayer.Entities
 
         public User()
         {
+            DateOfCreation = DateTime.Now;
             Nickname = "default";
             UserRole = UserRole.None;
             DiscardPile = new List<Card>();

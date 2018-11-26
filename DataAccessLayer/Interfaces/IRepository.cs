@@ -11,7 +11,8 @@ namespace DataAccessLayer.Interfaces
         Task<IEnumerable<T>> Get();
         Task<T> Get(int id);
         Task Create(T item);
-        Task Update(int id, T item);
+        Task Update(T item);
+        Task UpdateRange(IEnumerable<T> item);
         Task Delete(int id);
     }
 }
