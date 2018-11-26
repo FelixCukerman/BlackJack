@@ -18,13 +18,8 @@ namespace EntitiesLayer.Entities
         public Game()
         {
             DateOfCreation = DateTime.Now;
-            InitializeDeck();
-            Users = new List<User>();
-        }
-
-        private void InitializeDeck()
-        {
             Deck = new List<Card>();
+            Users = new List<User>();
         }
     }
 }
