@@ -14,8 +14,19 @@ namespace EntitiesLayer.Entities
         [Required]
         public Suit Suit { get; set; }
         [Required]
-        public string Value { get; set; }
+        public int Key { get; set; }
+        [Required]
+        public Value Value { get; set; }
         public User User { get; set; }
+
+        public Card()
+        {
+            Id = -1;
+            Suit = Suit.None;
+            Key = -1;
+            Value = Value.None;
+            User = new User();
+        }
     }
     public enum Suit
     {
@@ -26,19 +37,21 @@ namespace EntitiesLayer.Entities
         Pikes = 4
     }
 
-    //public enum Value
-    //{
-    //    Two = 2,
-    //    Three = 3,
-    //    Four = 4,
-    //    Five = 5,
-    //    Six = 6,
-    //    Seven = 7,
-    //    Eight = 8,
-    //    Nine = 9,
-    //    Ten = 10,
-    //    Jack = 11,
-    //    Queen = 12,
-    //    King = 13,
-    //}
+    public enum Value
+    {
+        None = 0,
+        Ace = 1,
+        Two = 2,
+        Three = 3,
+        Four = 4,
+        Five = 5,
+        Six = 6,
+        Seven = 7,
+        Eight = 8,
+        Nine = 9,
+        Ten = 10,
+        Jack = 11,
+        Queen = 12,
+        King = 13
+    }
 }

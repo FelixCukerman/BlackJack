@@ -16,6 +16,13 @@ namespace EntitiesLayer.Entities
         [Required]
         public UserRole UserRole { get; set; }
         public List<Card> DiscardPile { get; set; }
+
+        public User()
+        {
+            Nickname = "default";
+            UserRole = UserRole.None;
+            DiscardPile = new List<Card>();
+        }
     }
 
     public enum UserRole
