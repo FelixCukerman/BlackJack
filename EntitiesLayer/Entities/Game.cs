@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using EntitiesLayer.Abstraction;
 
 namespace EntitiesLayer.Entities
 {
     [NotMapped]
-    public class Game
+    public class Game : BaseEntity
     {
-        public int Id { get; set; }
-        public DateTime DateOfCreation { get; set; }
         public List<Card> Deck { get; set; }
         public List<User> Users { get; set; }
 

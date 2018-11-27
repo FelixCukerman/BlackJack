@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using EntitiesLayer.Abstraction;
 
 namespace EntitiesLayer.Entities
 {
-    public class Card
+    public class Card : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public DateTime DateOfCreation { get; set; }
         [Required]
         public Suit Suit { get; set; }
         [Required]

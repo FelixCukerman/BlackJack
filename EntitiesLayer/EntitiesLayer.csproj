@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstraction\BaseEntity.cs" />
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Entities\Game.cs" />
     <Compile Include="Entities\User.cs" />
@@ -57,8 +58,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BaseEntity\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

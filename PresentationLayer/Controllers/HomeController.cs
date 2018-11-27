@@ -33,6 +33,7 @@ namespace PresentationLayer.Controllers
                 IRepository<Card> repository = new CardRepository(db);
                 var card = new Card { Suit = Suit.Hearts, Value = Value.King, Key = 10, DateOfCreation = DateTime.Now };
                 await repository.Create(card);
+                await repository.Delete(53);
             }
             return View();
         }
