@@ -14,14 +14,14 @@ namespace EntitiesLayer.Entities
         public string Nickname { get; set; }
         [Required]
         public UserRole UserRole { get; set; }
-        public List<Card> DiscardPile { get; set; }
+        public List<Card> Cards { get; set; }
 
         public User()
         {
             DateOfCreation = DateTime.Now;
             Nickname = "default";
             UserRole = UserRole.None;
-            DiscardPile = new List<Card>();
+            Cards = new List<Card>();
         }
     }
 
