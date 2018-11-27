@@ -51,14 +51,8 @@
     <Compile Include="DatabaseInitializer.cs" />
     <Compile Include="GameContext.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Migrations\201811271433176_Initial.cs" />
-    <Compile Include="Migrations\201811271433176_Initial.Designer.cs">
-      <DependentUpon>201811271433176_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\CardRepository.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\GenericRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -69,11 +63,6 @@
       <Project>{67f2e8c1-1523-4608-826e-45181999b70f}</Project>
       <Name>EntitiesLayer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201811271433176_Initial.resx">
-      <DependentUpon>201811271433176_Initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

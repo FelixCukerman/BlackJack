@@ -30,7 +30,7 @@ namespace PresentationLayer.Controllers
             ViewBag.Message = "Your contact page.";
             using (GameContext db = new GameContext())
             {
-                IRepository<Card> repository = new CardRepository(db);
+                IRepository<Card> repository = new GenericRepository<Card>(db);
                 var card = new Card { Suit = Suit.Hearts, Value = Value.King, Key = 10, DateOfCreation = DateTime.Now };
                 await repository.Create(card);
             }

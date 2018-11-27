@@ -26,5 +26,7 @@ namespace DataAccessLayer
 
         public DbSet<User> Users { get; set; }
         public DbSet<Card> Cards { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Round> Rounds { get; set; }
     }
 }

@@ -8,7 +8,6 @@ using EntitiesLayer.Abstraction;
 
 namespace EntitiesLayer.Entities
 {
-    [NotMapped]
     public class Game : BaseEntity
     {
         public List<Card> Deck { get; set; }
