@@ -9,7 +9,7 @@ using System.Data.Entity;
 
 namespace DataAccessLayer.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private GameContext data;
         public UserRepository(GameContext data)
@@ -29,12 +29,14 @@ namespace DataAccessLayer.Repositories
             data.Users.Add(user);
             await data.SaveChangesAsync();
         }
+        public async Task CreateRange(IEnumerable<User> users)
+        {
+            data.Users.AddRange(users);
+            await data.SaveChangesAsync();
+        }
         public async Task Update(User user)
         {
-            var item = await data.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
-            item.Nickname = user.Nickname;
-            item.UserRole = user.UserRole;
-            item.Cards = user.Cards;
+            data.Entry(user).State = EntityState.Modified;
             await data.SaveChangesAsync();
         }
         public async Task UpdateRange(IEnumerable<User> users)
@@ -42,18 +44,24 @@ namespace DataAccessLayer.Repositories
             var userList = users.ToList();
             for (int i = 0; i < users.Count(); i++)
             {
-                var item = await data.Users.FirstOrDefaultAsync(x => x.Id == userList[i].Id);
-                item.Nickname = userList[i].Nickname;
-                item.UserRole = userList[i].UserRole;
-                item.Cards = userList[i].Cards;
+                data.Entry(userList).State = EntityState.Modified;
                 await data.SaveChangesAsync();
             }
         }
-        public async Task Delete(int id)
+        public async Task Delete(User user)
         {
-            var user = await data.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (user != null)
+            {
                 data.Users.Remove(user);
+            }
+            await data.SaveChangesAsync();
+        }
+        public async Task DeleteRange(IEnumerable<User> users)
+        {
+            if (users != null)
+            {
+                data.Users.RemoveRange(users);
+            }
             await data.SaveChangesAsync();
         }
     }

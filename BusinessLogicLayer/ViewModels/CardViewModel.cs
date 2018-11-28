@@ -10,8 +10,8 @@ namespace BusinessLogicLayer.ViewModels
     public class CardViewModel
     {
         public Suit Suit { get; set; }
-        public int Key { get; set; }
-        public Value Value { get; set; }
+        public int CardValue { get; set; }
+        public CardName CardName { get; set; }
         public List<User> Users { get; set; }
     }
 }

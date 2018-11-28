@@ -9,6 +9,7 @@ namespace EntitiesLayer.Entities
 {
     public class Move : BaseEntity
     {
+        public Round Round { get; set; }
         public User User { get; set; }
         public List<Card> Cards { get; set; }
     }

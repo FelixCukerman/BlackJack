@@ -10,11 +10,10 @@ namespace EntitiesLayer.Entities
 {
     public class Game : BaseEntity
     {
-        public List<User> Users { get; set; }
         [NotMapped]
-        public List<Card> Deck { get; set; }
+        public List<Card> Deck { get; set; } //from cache
         [NotMapped]
-        public List<Card> DiscardPile { get; set; }
+        public List<Card> DiscardPile { get; set; } //from User.Cards
         public List<Round> Rounds { get; set; }
 
         public Game()
@@ -22,7 +21,6 @@ namespace EntitiesLayer.Entities
             DateOfCreation = DateTime.Now;
             Deck = new List<Card>();
             DiscardPile = new List<Card>();
-            Users = new List<User>();
         }
     }
 }

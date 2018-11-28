@@ -17,7 +17,6 @@ namespace EntitiesLayer.Entities
         public UserRole UserRole { get; set; }
         [NotMapped]
         public List<Card> Cards { get; set; }
-        public List<Round> Rounds { get; set; }
 
         public User()
         {

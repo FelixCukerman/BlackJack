@@ -9,7 +9,7 @@ using System.Data.Entity;
 
 namespace DataAccessLayer.Repositories
 {
-    public class CardRepository
+    public class CardRepository : ICardRepository
     {
         private GameContext data;
         public CardRepository(GameContext data)
@@ -29,33 +29,39 @@ namespace DataAccessLayer.Repositories
             data.Cards.Add(card);
             await data.SaveChangesAsync();
         }
-        public async Task Update(Card card)
+        public async Task CreateRange(IEnumerable<Card> cards)
         {
-            var item = await data.Cards.FirstOrDefaultAsync(x => x.Id == card.Id);
-            item.Suit = card.Suit;
-            item.Users = item.Users; //TODO: 111
-            item.Value = item.Value;
+            data.Cards.AddRange(cards);
             await data.SaveChangesAsync();
         }
-
+        public async Task Update(Card card)
+        {
+            data.Entry(card).State = EntityState.Modified;
+            await data.SaveChangesAsync();
+        }
         public async Task UpdateRange(IEnumerable<Card> cards)
         {
             var cardList = cards.ToList();
             for(int i = 0; i < cards.Count(); i++)
             {
-                var item = await data.Cards.FirstOrDefaultAsync(x => x.Id == cardList[i].Id);
-                item.Suit = cardList[i].Suit;
-                item.Users = cardList[i].Users; //TODO: 111
-                item.Value = cardList[i].Value;
+                data.Entry(cardList[i]).State = EntityState.Modified;
                 await data.SaveChangesAsync();
             }
         }
-
-        public async Task Delete(int id)
+        public async Task Delete(Card card)
         {
-            var card = await data.Cards.FirstOrDefaultAsync(x => x.Id == id);
             if (card != null)
+            {
                 data.Cards.Remove(card);
+            }
+            await data.SaveChangesAsync();
+        }
+        public async Task DeleteRange(IEnumerable<Card> cards)
+        {
+            if(cards != null)
+            {
+                data.Cards.RemoveRange(cards);
+            }
             await data.SaveChangesAsync();
         }
     }
