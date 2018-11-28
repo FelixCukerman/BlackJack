@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EntitiesLayer.Abstraction;
 
 namespace EntitiesLayer.Entities
@@ -14,7 +15,9 @@ namespace EntitiesLayer.Entities
         public string Nickname { get; set; }
         [Required]
         public UserRole UserRole { get; set; }
+        [NotMapped]
         public List<Card> Cards { get; set; }
+        public List<Round> Rounds { get; set; }
 
         public User()
         {

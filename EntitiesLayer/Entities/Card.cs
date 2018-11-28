@@ -13,9 +13,9 @@ namespace EntitiesLayer.Entities
         [Required]
         public Suit Suit { get; set; }
         [Required]
-        public int Key { get; set; }
+        public int CardValue { get; set; }
         [Required]
-        public Value Value { get; set; }
+        public CardName CardName { get; set; }
         public List<User> Users { get; set; }
 
         public Card()
@@ -23,8 +23,8 @@ namespace EntitiesLayer.Entities
             Id = -1;
             DateOfCreation = DateTime.Now;
             Suit = Suit.None;
-            Key = -1;
-            Value = Value.None;
+            CardValue = -1;
+            CardName = CardName.None;
             Users = new List<User>();
         }
     }
@@ -37,7 +37,7 @@ namespace EntitiesLayer.Entities
         Pikes = 4
     }
 
-    public enum Value
+    public enum CardName
     {
         None = 0,
         Ace = 1,

@@ -10,9 +10,12 @@ namespace EntitiesLayer.Entities
 {
     public class Game : BaseEntity
     {
-        public List<Card> Deck { get; set; }
-        public List<Card> DiscardPile { get; set; }
         public List<User> Users { get; set; }
+        [NotMapped]
+        public List<Card> Deck { get; set; }
+        [NotMapped]
+        public List<Card> DiscardPile { get; set; }
+        public List<Round> Rounds { get; set; }
 
         public Game()
         {

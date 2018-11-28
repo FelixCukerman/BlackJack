@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EntitiesLayer.Abstraction;
-using System.ComponentModel.DataAnnotations;
 
 namespace EntitiesLayer.Entities
 {
-    public class Round : BaseEntity
+    public class Move : BaseEntity
     {
-        public Game Game { get; set; }
-        public List<Move> Moves { get; set; }
+        public User User { get; set; }
+        public List<Card> Cards { get; set; }
     }
 }
