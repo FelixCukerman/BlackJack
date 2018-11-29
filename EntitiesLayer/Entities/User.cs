@@ -17,10 +17,10 @@ namespace EntitiesLayer.Entities
         public UserRole UserRole { get; set; }
         [NotMapped]
         public List<Card> Cards { get; set; }
+        public List<Game> Games { get; set; }
 
         public User()
         {
-            Id = -1;
             DateOfCreation = DateTime.Now;
             Nickname = "default";
             UserRole = UserRole.None;

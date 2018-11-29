@@ -15,13 +15,15 @@ namespace EntitiesLayer.Entities
         [NotMapped]
         public List<Card> DiscardPile { get; set; } //from User.Cards
         public List<Round> Rounds { get; set; }
+        public List<User> Users { get; set; }
 
         public Game()
         {
             DateOfCreation = DateTime.Now;
-            Deck = new List<Card>();
+            Deck = new Deck().Cards;
             DiscardPile = new List<Card>();
             Rounds = new List<Round>();
+            Users = new List<User>();
         }
     }
 }
