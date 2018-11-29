@@ -12,5 +12,13 @@ namespace EntitiesLayer.Entities
     {
         public Game Game { get; set; }
         public List<Move> Moves { get; set; }
+
+        public Round()
+        {
+            Id = -1;
+            DateOfCreation = DateTime.Now;
+            Game = new Game();
+            Moves = new List<Move>();
+        }
     }
 }

@@ -21,6 +21,7 @@ namespace EntitiesLayer.Entities
             DateOfCreation = DateTime.Now;
             Deck = new List<Card>();
             DiscardPile = new List<Card>();
+            Rounds = new List<Round>();
         }
     }
 }
