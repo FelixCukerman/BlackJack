@@ -14,12 +14,7 @@ namespace DataAccessLayer
     {
         protected override void Seed(GameContext context)
         {
-            List<Card> cards = new List<Card>();
-            Round round = new Round();
-
-            cards = new Deck().Cards;
-
-            context.Cards.AddRange(cards);
+            context.Cards.AddRange(new Deck().Cards);
             context.Games.Add(new Game());
             context.Rounds.Add(new Round());
             context.Moves.Add(new Move());
