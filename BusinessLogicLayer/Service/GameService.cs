@@ -39,6 +39,17 @@ namespace BusinessLogicLayer.Service
             }
             return Deck;
         }
+        private bool IsBlackJack(Move move)
+        {
+            if(move.Cards.Sum(x => x.CardValue) == 21)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public async Task<GameViewModel> CreateNewGame(User user, int botQuantity)
         {
             var game = new Game();
@@ -65,7 +76,7 @@ namespace BusinessLogicLayer.Service
         public async Task<GameViewModel> CreateNewRound(int gameId)
         {
             var game = await gameRepository.Get(gameId);
-            game.Rounds.Add(new Round());
+            game.Rounds.Add(new Round { Game = game });
             await gameRepository.Update(game);
             return Mapper.Map<GameViewModel>(game);
         }
@@ -73,20 +84,25 @@ namespace BusinessLogicLayer.Service
         {
             var game = await gameRepository.Get(gameId);
             var dealer = game.Users.FirstOrDefault(x => x.UserRole == UserRole.Dealer);
-
+            
             for (int i = 0; i < game.Users.Count; i++)
             {
-                if(game.Users[i].UserRole != UserRole.Dealer && game.Users[i].UserRole != UserRole.None)
+                var move = new Move();
+                if (game.Users[i].UserRole != UserRole.Dealer && game.Users[i].UserRole != UserRole.None)
                 {
-                    for(int j = 0; j < 2; j++)
-                    {
-                        game.Users[i].Cards.Add(game.Deck.Last());
-                        game.Deck.Remove(game.Deck.Last());
-                        game.Rounds.Last().Moves.Add(new Move { Cards = game.Users[i].Cards, User = game.Users[i], Round = game.Rounds.Last()});
-                    }
+                    var cardToUser = game.Deck.Skip(game.Deck.Count - 2);
+                    game.Users[i].Cards.AddRange(cardToUser);
+                    game.Deck.RemoveRange(game.Deck.Count - 2, game.Deck.Count);
+                    move = new Move { Cards = game.Users[i].Cards, User = game.Users[i], Round = game.Rounds.Last() };
+                    game.Rounds.Last().Moves.Add(move);
+                }
+                if(IsBlackJack(move))
+                {
+                    game.Rounds.Last().Moves.Last().IsWin = true;
                 }
             }
-            for (int j = 0; j < 2; j++)
+
+            for (int i = 0; i < 2; i++)
             {
                 dealer.Cards.Add(game.Deck.Last());
                 game.Deck.Remove(game.Deck.Last());
@@ -98,12 +114,13 @@ namespace BusinessLogicLayer.Service
         public async Task<GameViewModel> DealCardToPlayer(User user, int gameId)
         {
             var game = await gameRepository.Get(gameId);
-
+            var move = new Move();
             if (user.UserRole != UserRole.None && user != null)
             {
                 game.Users.FirstOrDefault(x => x.Id == user.Id).Cards.Add(game.Deck.Last());
                 game.Deck.Remove(game.Deck.Last());
-                game.Rounds.Last().Moves.Add(new Move { Cards = user.Cards, User = user, Round = game.Rounds.Last() });
+                move = new Move { Cards = user.Cards, User = user, Round = game.Rounds.Last() };
+                game.Rounds.Last().Moves.Add(move);
             }
             await gameRepository.Update(game);
             return Mapper.Map<GameViewModel>(game);

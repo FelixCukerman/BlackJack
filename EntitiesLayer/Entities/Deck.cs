@@ -10,10 +10,12 @@ namespace EntitiesLayer.Entities
     public class Deck
     {
         public List<Card> Cards { get; set; }
+        public List<Card> DiscardPile { get; set; }
 
         public Deck()
         {
             Cards = new List<Card>();
+            DiscardPile = new List<Card>();
             for (int i = 1; i < 5; i++)
             {
                 for (int j = (int)CardName.Two; j < (int)CardName.Ten + 1; j++)
