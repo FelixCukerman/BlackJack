@@ -18,8 +18,7 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<IEnumerable<Game>> Get()
         {
-            return await data.Games.Include(x => x.Deck)
-                        .Include(x => x.DiscardPile)
+            return await data.Games
                         .Include(x => x.Rounds)
                         .Include(x => x.Users)
                         .ToListAsync<Game>();
@@ -27,8 +26,6 @@ namespace DataAccessLayer.Repositories
         public async Task<Game> Get(int id)
         {
             return await data.Games
-                        .Include(x => x.Deck)
-                        .Include(x => x.DiscardPile)
                         .Include(x => x.Rounds)
                         .Include(x => x.Users)
                         .FirstOrDefaultAsync(x => x.Id == id);

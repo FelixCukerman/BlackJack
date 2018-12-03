@@ -16,16 +16,10 @@ namespace BusinessLogicLayer.Service
     public class GameService : IGameService
     {
         IGameRepository gameRepository;
-        IUserRepository userRepository;
-        IMoveRepository moveRepository;
-        IRoundRepository roundRepository;
 
-        public GameService(IGameRepository gameRepository, IUserRepository userRepository, IMoveRepository moveRepository, IRoundRepository roundRepository)
+        public GameService(IGameRepository gameRepository)
         {
             this.gameRepository = gameRepository;
-            this.userRepository = userRepository;
-            this.moveRepository = moveRepository;
-            this.roundRepository = roundRepository;
         }
         private List<Card> Reshuffle(List<Card> Deck)
         {
