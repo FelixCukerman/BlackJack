@@ -8,6 +8,7 @@ using EntitiesLayer.Entities;
 using DataAccessLayer.Repositories;
 using DataAccessLayer.Interfaces;
 using System.Threading.Tasks;
+using BusinessLogicLayer.Service;
 
 namespace PresentationLayer.Controllers
 {
@@ -30,9 +31,8 @@ namespace PresentationLayer.Controllers
             ViewBag.Message = "Your contact page.";
             using (GameContext db = new GameContext())
             {
-                IRepository<Card> repository = new GenericRepository<Card>(db);
-                var card = new Card { Suit = Suit.Hearts, CardName = CardName.King, CardValue = 10, DateOfCreation = DateTime.Now };
-                await repository.Create(card);
+                var service = new GameService(new GameRepository(db), new UserRepository(db));
+                await service.CreateNewGame(new User { UserRole = UserRole.PeoplePlayer }, 3);
             }
             return View();
         }

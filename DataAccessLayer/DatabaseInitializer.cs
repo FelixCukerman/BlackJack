@@ -15,11 +15,6 @@ namespace DataAccessLayer
         protected override void Seed(GameContext context)
         {
             context.Cards.AddRange(new Deck().Cards);
-            context.Games.Add(new Game());
-            context.Rounds.Add(new Round());
-            context.Moves.Add(new Move());
-            context.Users.Add(new User());
-
             context.SaveChanges();
         }
     }

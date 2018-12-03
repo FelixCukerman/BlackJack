@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using AutoMapper;
+using BusinessLogicLayer.Service;
 
 namespace PresentationLayer
 {
@@ -16,6 +18,19 @@ namespace PresentationLayer
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            AutoMapperConfiguration.Configure();
+        }
+
+        public class AutoMapperConfiguration
+        {
+            public static void Configure()
+            {
+                Mapper.Initialize(x =>
+                {
+                    x.AddProfile<MapperService>();
+                });
+                Mapper.Configuration.AssertConfigurationIsValid();
+            }
         }
     }
 }
