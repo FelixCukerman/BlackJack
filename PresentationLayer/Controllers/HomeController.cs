@@ -31,10 +31,12 @@ namespace PresentationLayer.Controllers
             ViewBag.Message = "Your contact page.";
             using (GameContext db = new GameContext())
             {
-                var service = new GameService(new GameRepository(db));
-                //await service.CreateNewGame(new User { UserRole = UserRole.PeoplePlayer, Nickname = "ass228" }, 3);
-                //await service.CreateNewRound(1);
+                var user = new User { UserRole = UserRole.PeoplePlayer, Nickname = "ass228" };
+                var service = new GameService(new GameRepository(db), new CardRepository(db));
+                await service.CreateNewGame(user, 3);
+                await service.CreateNewRound(1);
                 await service.DealCards(1);
+                await service.DealCardToPlayer(user, 1);
             }
             return View();
         }

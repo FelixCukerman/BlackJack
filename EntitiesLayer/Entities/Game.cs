@@ -20,7 +20,7 @@ namespace EntitiesLayer.Entities
         public Game()
         {
             DateOfCreation = DateTime.Now;
-            Deck = new Deck().Cards;
+            Deck = new List<Card>();
             DiscardPile = new List<Card>();
             Rounds = new List<Round>();
             Users = new List<User>();
