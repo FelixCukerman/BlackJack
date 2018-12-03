@@ -11,7 +11,7 @@ namespace EntitiesLayer.Entities
     {
         public List<Card> Cards { get; set; }
 
-        public Deck()
+        public Deck() //TODO : Govnokod repare!!!
         {
             Cards = new List<Card>();
             for (int i = 1; i < 5; i++)

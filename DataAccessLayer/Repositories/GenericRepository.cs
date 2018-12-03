@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using DataAccessLayer.Interfaces;
 using System.Linq.Expressions;
 using System.Data.Entity;
+using EntitiesLayer.Abstraction;
 
 namespace DataAccessLayer.Repositories
 {
-    public class GenericRepository<T> : IRepository<T> where T : class
+    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         private GameContext data;
         private DbSet<T> dbSet;
