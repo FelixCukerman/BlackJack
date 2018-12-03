@@ -15,7 +15,6 @@ namespace EntitiesLayer.Entities
 
         public Round()
         {
-            Id = -1;
             DateOfCreation = DateTime.Now;
             Game = new Game();
             Moves = new List<Move>();

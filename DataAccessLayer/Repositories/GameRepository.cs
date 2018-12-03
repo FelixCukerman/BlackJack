@@ -44,9 +44,9 @@ namespace DataAccessLayer.Repositories
             var gameList = games.ToList();
             for (int i = 0; i < games.Count(); i++)
             {
-                data.Entry(gameList).State = EntityState.Modified;
-                await data.SaveChangesAsync();
+                data.Entry(gameList[i]).State = EntityState.Modified;
             }
+            await data.SaveChangesAsync();
         }
         public async Task Delete(Game game)
         {

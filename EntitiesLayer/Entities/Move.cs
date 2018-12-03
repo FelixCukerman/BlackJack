@@ -16,7 +16,6 @@ namespace EntitiesLayer.Entities
 
         public Move()
         {
-            Id = -1;
             DateOfCreation = DateTime.Now;
             Round = new Round();
             User = new User();

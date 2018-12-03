@@ -44,9 +44,9 @@ namespace DataAccessLayer.Repositories
             var moveList = moves.ToList();
             for (int i = 0; i < moves.Count(); i++)
             {
-                data.Entry(moveList).State = EntityState.Modified;
-                await data.SaveChangesAsync();
+                data.Entry(moveList[i]).State = EntityState.Modified;
             }
+            await data.SaveChangesAsync();
         }
         public async Task Delete(Move move)
         {

@@ -20,7 +20,6 @@ namespace EntitiesLayer.Entities
 
         public Card()
         {
-            Id = -1;
             DateOfCreation = DateTime.Now;
             Suit = Suit.None;
             CardValue = -1;

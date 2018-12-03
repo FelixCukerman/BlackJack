@@ -20,7 +20,6 @@ namespace EntitiesLayer.Entities
 
         public User()
         {
-            Id = -1;
             DateOfCreation = DateTime.Now;
             Nickname = "default";
             UserRole = UserRole.None;

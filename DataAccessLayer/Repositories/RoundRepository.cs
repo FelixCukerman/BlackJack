@@ -44,9 +44,9 @@ namespace DataAccessLayer.Repositories
             var roundList = rounds.ToList();
             for (int i = 0; i < roundList.Count; i++)
             {
-                data.Entry(roundList).State = EntityState.Modified;
-                await data.SaveChangesAsync();
+                data.Entry(roundList[i]).State = EntityState.Modified;
             }
+            await data.SaveChangesAsync();
         }
         public async Task Delete(Round round)
         {
