@@ -4,22 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EntitiesLayer.Abstraction;
+using EntitiesLayer.Entities;
 
 namespace EntitiesLayer.Entities
 {
-    public class Move : BaseEntity
+    public class RoundStatistics : BaseEntity
     {
         public Round Round { get; set; }
         public User User { get; set; }
-        public List<Card> Cards { get; set; }
+        public bool IsWin { get; set; }
 
-        public Move()
+        public RoundStatistics()
         {
-            Id = -1;
             DateOfCreation = DateTime.Now;
-            Round = new Round();
-            User = new User();
-            Cards = new List<Card>();
+            User user = new User();
+            IsWin = false;
         }
     }
 }

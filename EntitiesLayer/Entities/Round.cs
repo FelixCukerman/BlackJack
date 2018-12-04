@@ -12,6 +12,7 @@ namespace EntitiesLayer.Entities
     {
         public Game Game { get; set; }
         public List<Move> Moves { get; set; }
+        public List<RoundStatistics> RoundStatistics { get; set; }
 
         public Round()
         {

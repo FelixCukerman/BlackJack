@@ -28,8 +28,7 @@ namespace BusinessLogicLayer.Service
 
                 configuration.CreateMap<Move, MoveViewModel>()
                 .ForMember(x => x.User, x => x.MapFrom(m => m.User))
-                .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards))
-                .ForMember(x => x.IsWin, x => x.MapFrom(m => m.IsWin));
+                .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
 
                 configuration.CreateMap<Round, RoundViewModel>()
                 .ForMember(x => x.Moves, x => x.MapFrom(m => m.Moves));

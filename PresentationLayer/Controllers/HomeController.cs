@@ -26,6 +26,8 @@ namespace PresentationLayer.Controllers
             {
                 var service = new GameService(new GameRepository(db), new CardRepository(db));
                 await service.DealCardToPlayer(db.Users.FirstOrDefault(x => x.Nickname == "ass228"), 1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToBots(1);
             }
             return View();
         }
@@ -40,7 +42,6 @@ namespace PresentationLayer.Controllers
                 await service.CreateNewGame(user, 3);
                 await service.CreateNewRound(1);
                 await service.DealCards(1);
-                await service.DealCardToPlayer(user, 1);
             }
             return View();
         }
