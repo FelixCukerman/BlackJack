@@ -38,6 +38,9 @@ namespace BusinessLogicLayer.Service
                 .ForMember(x => x.Nickname, x => x.MapFrom(m => m.Nickname))
                 .ForMember(x => x.UserRole, x => x.MapFrom(m => m.UserRole))
                 .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
+
+                configuration.CreateMap<Game, GameHistoryViewModel>()
+                .ForMember(x => x.Rounds, x => x.MapFrom(m => m.Rounds));
             });
         }
     }

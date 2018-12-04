@@ -18,11 +18,15 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<IEnumerable<Round>> Get()
         {
-            return await data.Rounds.ToListAsync<Round>();
+            return await data.Rounds
+            .Include(x => x.Moves)
+            .ToListAsync<Round>();
         }
         public async Task<Round> Get(int id)
         {
-            return await data.Rounds.FirstOrDefaultAsync(x => x.Id == id);
+            return await data.Rounds
+            .Include(x => x.Moves)
+            .FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task Create(Round round)
         {

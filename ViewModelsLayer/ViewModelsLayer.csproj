@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CardViewModel.cs" />
+    <Compile Include="ViewModels\GameHistoryViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\MoveViewModel.cs" />
     <Compile Include="ViewModels\RoundViewModel.cs" />

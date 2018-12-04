@@ -19,10 +19,14 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public async Task<ActionResult> About()
         {
             ViewBag.Message = "Your application description page.";
-
+            using (GameContext db = new GameContext())
+            {
+                var service = new GameService(new GameRepository(db), new CardRepository(db));
+                await service.DealCardToPlayer(db.Users.FirstOrDefault(x => x.Nickname == "ass228"), 1);
+            }
             return View();
         }
 

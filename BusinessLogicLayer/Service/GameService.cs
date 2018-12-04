@@ -26,6 +26,7 @@ namespace BusinessLogicLayer.Service
             this.cardRepository = cardRepository;
             deckProvider = new DeckProvider();
         }
+
         private List<Card> Reshuffle(List<Card> Deck)
         {
             Random rand = new Random();
@@ -38,6 +39,7 @@ namespace BusinessLogicLayer.Service
             }
             return Deck;
         }
+
         private bool IsBlackJack(Move move)
         {
             if(move.Cards.Sum(x => x.CardValue) == 21 && move != null)
@@ -49,6 +51,7 @@ namespace BusinessLogicLayer.Service
                 return false;
             }
         }
+
         private bool IsBust(Move move)
         {
             if(move.Cards.Sum(x => x.CardValue) > 21 && move != null)
@@ -60,6 +63,7 @@ namespace BusinessLogicLayer.Service
                 return false;
             }
         }
+
         public async Task<GameViewModel> CreateNewGame(User user, int botQuantity)
         {
             var game = new Game();
@@ -75,7 +79,7 @@ namespace BusinessLogicLayer.Service
                 game.Users.Add(new User { Nickname = "Dealer", UserRole = UserRole.Dealer });
                 for (int i = 0; i < botQuantity; i++)
                 {
-                    game.Users.Add(new User { Nickname = "Bot#"+i, UserRole = UserRole.BotPlayer});
+                    game.Users.Add(new User { Nickname = "Bot#"+(i+1), UserRole = UserRole.BotPlayer});
                 }
             }
 
@@ -85,6 +89,7 @@ namespace BusinessLogicLayer.Service
 
             return Mapper.Map<GameViewModel>(game);
         }
+
         public async Task<GameViewModel> CreateNewRound(int gameId)
         {
             var game = await gameRepository.Get(gameId);
@@ -92,6 +97,7 @@ namespace BusinessLogicLayer.Service
             await gameRepository.Update(game);
             return Mapper.Map<GameViewModel>(game);
         }
+
         public async Task<GameViewModel> DealCards(int gameId)
         {
             var game = await gameRepository.Get(gameId);
@@ -119,29 +125,36 @@ namespace BusinessLogicLayer.Service
             }
 
             cardToUser = game.Deck.Skip(game.Deck.Count - 2).ToList();
-            game.Users.FirstOrDefault(x => x.UserRole == UserRole.PeoplePlayer).Cards.AddRange(cardToUser);
+            game.Users.FirstOrDefault(x => x.UserRole == UserRole.Dealer).Cards.AddRange(cardToUser);
             game.Deck.RemoveRange(game.Deck.Count - 2, 2);
             game.Rounds.Last().Moves.Add(new Move { Cards = dealer.Cards, User = dealer, Round = game.Rounds.Last() });
 
+            deckProvider.Update(new Deck { Cards = game.Deck, DiscardPile = new List<Card>()});
             await gameRepository.Update(game);
             return Mapper.Map<GameViewModel>(game);
         }
+
         public async Task<GameViewModel> DealCardToPlayer(User user, int gameId)
         {
             var game = await gameRepository.Get(gameId);
             var deckFromCache = deckProvider.Get();
             game.Deck = deckFromCache.Cards;
             game.DiscardPile = deckFromCache.DiscardPile;
-            var move = new Move();
             if (user.UserRole != UserRole.None && user != null)
             {
                 game.Users.FirstOrDefault(x => x.Id == user.Id).Cards.Add(game.Deck.Last());
                 game.Deck.Remove(game.Deck.Last());
-                move = new Move { Cards = user.Cards, User = user, Round = game.Rounds.Last() };
-                game.Rounds.Last().Moves.Add(move);
+                game.Rounds.Last().Moves.Add(new Move { Cards = user.Cards, User = user, Round = game.Rounds.Last() });
             }
+            deckProvider.Update(new Deck { Cards = game.Deck, DiscardPile = new List<Card>() });
             await gameRepository.Update(game);
             return Mapper.Map<GameViewModel>(game);
+        }
+
+        public async Task<GameHistoryViewModel> GameHistory(int gameId)
+        {
+            var game = await gameRepository.Get(gameId);
+            return Mapper.Map<GameHistoryViewModel>(game);
         }
     }
 }
