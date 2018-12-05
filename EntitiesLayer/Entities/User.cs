@@ -26,6 +26,7 @@ namespace EntitiesLayer.Entities
             Nickname = "default";
             UserRole = UserRole.None;
             Cards = new List<Card>();
+            RoundStatistics = new List<RoundStatistics>();
         }
     }
 

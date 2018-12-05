@@ -11,7 +11,7 @@ namespace EntitiesLayer.Entities
     {
         public Round Round { get; set; }
         public User User { get; set; }
-        public List<Card> Cards { get; set; }
+        public List<MoveCards> MoveCards { get; set; }
 
         public Move()
         {
@@ -19,7 +19,7 @@ namespace EntitiesLayer.Entities
             DateOfCreation = DateTime.Now;
             Round = new Round();
             User = new User();
-            Cards = new List<Card>();
+            MoveCards = new List<MoveCards>();
         }
     }
 }

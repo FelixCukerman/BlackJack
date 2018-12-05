@@ -16,7 +16,7 @@ namespace EntitiesLayer.Entities
         public int CardValue { get; set; }
         [Required]
         public CardName CardName { get; set; }
-        public List<Move> Moves { get; set; }
+        public List<MoveCards> MoveCards { get; set; }
 
         public Card()
         {
@@ -25,6 +25,7 @@ namespace EntitiesLayer.Entities
             Suit = Suit.None;
             CardValue = -1;
             CardName = CardName.None;
+            MoveCards = new List<MoveCards>();
         }
     }
     public enum Suit

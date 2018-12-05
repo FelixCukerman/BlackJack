@@ -18,6 +18,7 @@ namespace EntitiesLayer.Entities
         {
             DateOfCreation = DateTime.Now;
             Moves = new List<Move>();
+            RoundStatistics = new List<RoundStatistics>();
         }
     }
 }

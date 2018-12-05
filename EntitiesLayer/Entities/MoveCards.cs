@@ -8,18 +8,15 @@ using EntitiesLayer.Entities;
 
 namespace EntitiesLayer.Entities
 {
-    public class RoundStatistics : BaseEntity
+    public class MoveCards : BaseEntity
     {
-        public Round Round { get; set; }
-        public User User { get; set; }
-        public bool IsWin { get; set; }
-
-        public RoundStatistics()
+        public Move Move { get; set; }
+        public Card Card { get; set; }
+        public MoveCards()
         {
             DateOfCreation = DateTime.Now;
-            User = new User();
-            Round = new Round();
-            IsWin = false;
+            Move = new Move();
+            Card = new Card();
         }
     }
 }
