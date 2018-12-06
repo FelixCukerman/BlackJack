@@ -27,7 +27,7 @@ namespace PresentationLayer
             {
                 Mapper.Initialize(x =>
                 {
-                    x.AddProfile<MapperService>();
+                    x.AddProfile<MapperServiceProfile>();
                 });
                 Mapper.Configuration.AssertConfigurationIsValid();
             }

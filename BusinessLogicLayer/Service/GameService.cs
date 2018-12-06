@@ -92,6 +92,17 @@ namespace BusinessLogicLayer.Service
         }
         #endregion
 
+        #region GameIsOver
+        public bool GameIsOver(Game game)
+        {
+            if(game.RoundQuantity == game.Rounds.Count)
+            {
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
         #region CreateNewGame
         public async Task<GameViewModel> CreateNewGame(User user, int botQuantity)
         {
@@ -116,12 +127,15 @@ namespace BusinessLogicLayer.Service
             await _gameRepository.Create(game);
             _deckProvider.Add(new Deck { Cards = game.Deck, DiscardPile = game.DiscardPile });
 
-            return Mapper.Map<GameViewModel>(game);
+            GameViewModel result = Mapper.Map<GameViewModel>(game);
+
+            return result;
+
         }
         #endregion
 
         #region CreateNewRound
-        public async Task<GameViewModel> CreateNewRound(int gameId)
+        private async Task<GameViewModel> CreateNewRound(int gameId)
         {
             var game = await _gameRepository.Get(gameId);
             var deckFromCache = _deckProvider.Get();
@@ -238,6 +252,19 @@ namespace BusinessLogicLayer.Service
 
             _deckProvider.Update(new Deck { Cards = game.Deck, DiscardPile = new List<Card>() });
             await _gameRepository.Update(game);
+
+            if(GameIsOver(game))
+            {
+                var result = Mapper.Map<GameViewModel>(game);
+                result.IsOver = true;
+                return result;
+            }
+
+            if(RoundIsOver(game))
+            {
+                var result = await CreateNewRound(game.Id);
+                return result;
+            }
             return Mapper.Map<GameViewModel>(game);
         }
         #endregion

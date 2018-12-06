@@ -13,5 +13,6 @@ namespace ViewModelsLayer.ViewModels
         public List<CardViewModel> Deck { get; set; }
         public List<CardViewModel> DiscardPile { get; set; }
         public List<RoundViewModel> Rounds { get; set; }
+        public bool IsOver { get; set; }
     }
 }

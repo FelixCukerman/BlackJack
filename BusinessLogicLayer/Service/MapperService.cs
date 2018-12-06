@@ -9,38 +9,36 @@ using ViewModelsLayer.ViewModels;
 
 namespace BusinessLogicLayer.Service
 {
-    public class MapperService : Profile
+    public class MapperServiceProfile : Profile
     {
-        public static void Initialize()
+        public MapperServiceProfile() : base()
         {
-            new MapperConfiguration(configuration =>
-            {
-                configuration.CreateMap<Card, CardViewModel>()
+            CreateMap<Card, CardViewModel>()
                 .ForMember(x => x.CardName, x => x.MapFrom(m => m.CardName))
                 .ForMember(x => x.CardValue, x => x.MapFrom(m => m.CardValue))
                 .ForMember(x => x.Suit, x => x.MapFrom(m => m.Suit));
 
-                configuration.CreateMap<Game, GameViewModel>()
-                .ForMember(x => x.Deck, x => x.MapFrom(m => m.Deck))
-                .ForMember(x => x.DiscardPile, x => x.MapFrom(m => m.DiscardPile))
-                .ForMember(x => x.Rounds, x => x.MapFrom(m => m.Rounds))
-                .ForMember(x => x.Users, x => x.MapFrom(m => m.Users));
+            CreateMap<Game, GameViewModel>()
+            .ForMember(x => x.Deck, x => x.MapFrom(m => m.Deck))
+            .ForMember(x => x.DiscardPile, x => x.MapFrom(m => m.DiscardPile))
+            .ForMember(x => x.Rounds, x => x.MapFrom(m => m.Rounds))
+            .ForMember(x => x.Users, x => x.MapFrom(m => m.Users))
+            .ForMember(x => x.IsOver, x => x.Ignore());
 
-                configuration.CreateMap<Move, MoveViewModel>()
-                .ForMember(x => x.User, x => x.MapFrom(m => m.User))
-                .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
+            CreateMap<Move, MoveViewModel>()
+            .ForMember(x => x.User, x => x.MapFrom(m => m.User))
+            .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
 
-                configuration.CreateMap<Round, RoundViewModel>()
-                .ForMember(x => x.Moves, x => x.MapFrom(m => m.Moves));
+            CreateMap<Round, RoundViewModel>()
+            .ForMember(x => x.Moves, x => x.MapFrom(m => m.Moves));
 
-                configuration.CreateMap<User, UserViewModel>()
-                .ForMember(x => x.Nickname, x => x.MapFrom(m => m.Nickname))
-                .ForMember(x => x.UserRole, x => x.MapFrom(m => m.UserRole))
-                .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
+            CreateMap<User, UserViewModel>()
+            .ForMember(x => x.Nickname, x => x.MapFrom(m => m.Nickname))
+            .ForMember(x => x.UserRole, x => x.MapFrom(m => m.UserRole))
+            .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
 
-                configuration.CreateMap<Game, GameHistoryViewModel>()
-                .ForMember(x => x.Rounds, x => x.MapFrom(m => m.Rounds));
-            });
+            CreateMap<Game, GameHistoryViewModel>()
+            .ForMember(x => x.Rounds, x => x.MapFrom(m => m.Rounds));
         }
     }
 }
