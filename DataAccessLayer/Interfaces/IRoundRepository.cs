@@ -7,15 +7,7 @@ using EntitiesLayer.Entities;
 
 namespace DataAccessLayer.Interfaces
 {
-    public interface IRoundRepository
+    public interface IRoundRepository : IRepository<Round>
     {
-        Task<IEnumerable<Round>> Get();
-        Task<Round> Get(int id);
-        Task Create(Round item);
-        Task CreateRange(IEnumerable<Round> items);
-        Task Update(Round item);
-        Task UpdateRange(IEnumerable<Round> items);
-        Task Delete(Round item);
-        Task DeleteRange(IEnumerable<Round> items);
     }
 }

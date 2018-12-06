@@ -7,15 +7,7 @@ using EntitiesLayer.Entities;
 
 namespace DataAccessLayer.Interfaces
 {
-    public interface ICardRepository
+    public interface ICardRepository : IRepository<Card>
     {
-        Task<IEnumerable<Card>> Get();
-        Task<Card> Get(int id);
-        Task Create(Card item);
-        Task CreateRange(IEnumerable<Card> items);
-        Task Update(Card item);
-        Task UpdateRange(IEnumerable<Card> items);
-        Task Delete(Card item);
-        Task DeleteRange(IEnumerable<Card> items);
     }
 }

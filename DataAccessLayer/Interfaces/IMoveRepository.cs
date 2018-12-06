@@ -7,15 +7,7 @@ using EntitiesLayer.Entities;
 
 namespace DataAccessLayer.Interfaces
 {
-    public interface IMoveRepository
+    public interface IMoveRepository : IRepository<Move>
     {
-        Task<IEnumerable<Move>> Get();
-        Task<Move> Get(int id);
-        Task Create(Move item);
-        Task CreateRange(IEnumerable<Move> items);
-        Task Update(Move item);
-        Task UpdateRange(IEnumerable<Move> items);
-        Task Delete(Move item);
-        Task DeleteRange(IEnumerable<Move> items);
     }
 }

@@ -45,8 +45,8 @@ namespace DataAccessLayer.Repositories
             for(int i = 0; i < cards.Count(); i++)
             {
                 data.Entry(cardList[i]).State = EntityState.Modified;
-                await data.SaveChangesAsync();
             }
+            await data.SaveChangesAsync();
         }
         public async Task Delete(Card card)
         {

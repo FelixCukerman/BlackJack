@@ -18,7 +18,6 @@ namespace EntitiesLayer.Entities
         [NotMapped]
         public List<Card> Cards { get; set; }
         public List<Game> Games { get; set; }
-        public List<RoundStatistics> RoundStatistics { get; set; }
 
         public User()
         {
@@ -26,7 +25,6 @@ namespace EntitiesLayer.Entities
             Nickname = "default";
             UserRole = UserRole.None;
             Cards = new List<Card>();
-            RoundStatistics = new List<RoundStatistics>();
         }
     }
 

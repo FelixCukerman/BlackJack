@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Interfaces;
+using EntitiesLayer.Abstraction;
 using System.Linq.Expressions;
 using System.Data.Entity;
 
 namespace DataAccessLayer.Repositories
 {
-    public class GenericRepository<T> : IRepository<T> where T : class
+    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         private GameContext data;
         private DbSet<T> dbSet;
@@ -47,8 +48,8 @@ namespace DataAccessLayer.Repositories
             for (int i = 0; i < items.Count(); i++)
             {
                 data.Entry(list[0]).State = EntityState.Modified;
-                await data.SaveChangesAsync();
             }
+            await data.SaveChangesAsync();
         }
         public async Task Delete(T t)
         {
