@@ -10,6 +10,6 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface IGameService
     {
-        Task<GameViewModel> CreateNewGame(User user, int botQuantity);
+        Task<GameViewModel> CreateNewGame(User user, int botQuantity, int roundQuantity);
     }
 }

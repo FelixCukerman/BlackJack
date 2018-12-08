@@ -18,17 +18,15 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<IEnumerable<Game>> Get()
         {
-            return await data.Games
-                        .Include(x => x.Rounds)
-                        .Include(x => x.Users)
-                        .ToListAsync<Game>();
+            return await data.Games.ToListAsync<Game>();
         }
         public async Task<Game> Get(int id)
         {
-            return await data.Games
-                        .Include(x => x.Rounds)
-                        .Include(x => x.Users)
-                        .FirstOrDefaultAsync(x => x.Id == id);
+            return await data.Games.FirstOrDefaultAsync(x => x.Id == id);
+        }
+        public async Task<IEnumerable<Game>> Get(Func<Game, bool> predicate)
+        {
+            return data.Set<Game>().AsNoTracking().Where(predicate).ToList();
         }
         public async Task Create(Game game)
         {

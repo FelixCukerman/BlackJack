@@ -14,31 +14,22 @@ namespace BusinessLogicLayer.Service
         public MapperServiceProfile() : base()
         {
             CreateMap<Card, CardViewModel>()
-                .ForMember(x => x.CardName, x => x.MapFrom(m => m.CardName))
-                .ForMember(x => x.CardValue, x => x.MapFrom(m => m.CardValue))
-                .ForMember(x => x.Suit, x => x.MapFrom(m => m.Suit));
-
-            CreateMap<Game, GameViewModel>()
-            .ForMember(x => x.Deck, x => x.MapFrom(m => m.Deck))
-            .ForMember(x => x.DiscardPile, x => x.MapFrom(m => m.DiscardPile))
-            .ForMember(x => x.Rounds, x => x.MapFrom(m => m.Rounds))
-            .ForMember(x => x.Users, x => x.MapFrom(m => m.Users))
-            .ForMember(x => x.IsOver, x => x.Ignore());
+            .ForMember(x => x.CardName, x => x.MapFrom(m => m.CardName))
+            .ForMember(x => x.CardValue, x => x.MapFrom(m => m.CardValue))
+            .ForMember(x => x.Suit, x => x.MapFrom(m => m.Suit));
 
             CreateMap<Move, MoveViewModel>()
             .ForMember(x => x.User, x => x.MapFrom(m => m.User))
-            .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
+            .ForMember(x => x.Cards, x => x.Ignore());
 
             CreateMap<Round, RoundViewModel>()
-            .ForMember(x => x.Moves, x => x.MapFrom(m => m.Moves));
+            .ForMember(x => x.Moves, x => x.Ignore())
+            .ForMember(x => x.IsOver, x => x.Ignore());
 
             CreateMap<User, UserViewModel>()
             .ForMember(x => x.Nickname, x => x.MapFrom(m => m.Nickname))
             .ForMember(x => x.UserRole, x => x.MapFrom(m => m.UserRole))
             .ForMember(x => x.Cards, x => x.MapFrom(m => m.Cards));
-
-            CreateMap<Game, GameHistoryViewModel>()
-            .ForMember(x => x.Rounds, x => x.MapFrom(m => m.Rounds));
         }
     }
 }

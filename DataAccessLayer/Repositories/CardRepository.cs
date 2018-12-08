@@ -24,6 +24,10 @@ namespace DataAccessLayer.Repositories
         {
             return await data.Cards.FirstOrDefaultAsync(x => x.Id == id);
         }
+        public async Task<IEnumerable<Card>> Get(Func<Card, bool> predicate)
+        {
+            return data.Set<Card>().AsNoTracking().Where(predicate).ToList();
+        }
         public async Task Create(Card card)
         {
             data.Cards.Add(card);

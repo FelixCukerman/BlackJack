@@ -9,5 +9,6 @@ namespace ViewModelsLayer.ViewModels
     public class RoundViewModel
     {
         public List<MoveViewModel> Moves { get; set; }
+        public bool IsOver { get; set; }
     }
 }

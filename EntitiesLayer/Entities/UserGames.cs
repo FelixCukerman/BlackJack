@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EntitiesLayer.Abstraction;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+using EntitiesLayer.Abstraction;
 
 namespace EntitiesLayer.Entities
 {
-    public class Move : BaseEntity
+    public class UserGames : BaseEntity
     {
-        public bool? IsWin { get; set; }
-        public int? RoundId { get; set; }
-        [ForeignKey("RoundId")]
-        public Round Round { get; set; }
         public int? UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
-        [Required]
-        public int CurrentRate { get; set; }
+        public int? GameId { get; set; }
+        [ForeignKey("GameId")]
+        public Game Game { get; set; }
 
-        public Move()
+        public UserGames()
         {
             DateOfCreation = DateTime.Now;
         }

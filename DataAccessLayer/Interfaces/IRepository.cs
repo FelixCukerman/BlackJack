@@ -11,6 +11,7 @@ namespace DataAccessLayer.Interfaces
     {
         Task<IEnumerable<T>> Get();
         Task<T> Get(int id);
+        Task<IEnumerable<T>> Get(Func<T, bool> predicate);
         Task Create(T item);
         Task CreateRange(IEnumerable<T> items);
         Task Update(T item);

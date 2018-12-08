@@ -18,15 +18,15 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<IEnumerable<Move>> Get()
         {
-            return await data.Moves
-            .Include(x => x.Cards)
-            .ToListAsync<Move>();
+            return await data.Moves.ToListAsync<Move>();
         }
         public async Task<Move> Get(int id)
         {
-            return await data.Moves
-            .Include(x => x.Cards)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            return await data.Moves.FirstOrDefaultAsync(x => x.Id == id);
+        }
+        public async Task<IEnumerable<Move>> Get(Func<Move, bool> predicate)
+        {
+            return data.Set<Move>().AsNoTracking().Where(predicate).ToList();
         }
         public async Task Create(Move move)
         {

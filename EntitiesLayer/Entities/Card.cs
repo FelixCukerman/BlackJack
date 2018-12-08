@@ -16,16 +16,13 @@ namespace EntitiesLayer.Entities
         public int CardValue { get; set; }
         [Required]
         public CardName CardName { get; set; }
-        public List<Move> Moves { get; set; }
 
         public Card()
         {
-            Id = -1;
             DateOfCreation = DateTime.Now;
             Suit = Suit.None;
             CardValue = -1;
             CardName = CardName.None;
-            Moves = new List<Move>();
         }
     }
     public enum Suit
