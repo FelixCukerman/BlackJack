@@ -54,6 +54,15 @@ namespace PresentationLayer.Controllers
                 var user = new User { UserRole = UserRole.PeoplePlayer, Nickname = "ass228" };
                 var service = new GameService(new GameRepository(db), new CardRepository(db), new RoundRepository(db), new MoveRepository(db), new MoveCardsRepository(db), new UserGamesRepository(db), new UserRepository(db));
                 await service.CreateNewGame(user, 3, 5);
+                await service.DealCards(1);
+                await service.DealCardToPlayer(user, 1);
+                await service.DealCardToPlayer(user, 1);
+                await service.DealCardToPlayer(user, 1);
+                await service.DealCardToPlayer(user, 1);
+                await service.DealCardToPlayer(user, 1);
+                await service.DealCardToPlayer(user, 1);
+                await service.DealCardToPlayer(user, 1);
+                await service.DealCardToPlayer(user, 1);
             }
             return View();
         }
