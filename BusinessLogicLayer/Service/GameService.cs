@@ -87,10 +87,17 @@ namespace BusinessLogicLayer.Service
         #endregion
 
         #region IsBust
-        private async Task<bool> IsBust(Move move)
+        private async Task<bool> IsBust(User user, int roundId)
         {
-            var moveCards = await _moveCardsRepository.Get(x => x.MoveId == move.Id);
+            var moveCards = new List<MoveCards>();
+            var moves = await _moveRepository.Get(x => x.UserId == user.Id && x.RoundId == roundId);
+            for(int i = 0; i < moves.Count(); i++)
+            {
+                moveCards.AddRange(await _moveCardsRepository.Get(x => x.MoveId == moves.ElementAt(i).Id));
+            }
+
             var cards = await MovecardsToCards(moveCards);
+            var a = cards.Sum(x => x.CardValue);
             if (cards.Sum(x => x.CardValue) > 21)
             {
                 return true;
@@ -149,7 +156,7 @@ namespace BusinessLogicLayer.Service
             {
                 for(int i = 0; i < moveCards.Count(); i++)
                 {
-                    cards.Add(await _cardRepository.Get((int)moveCards.ElementAt(i).MoveId));
+                    cards.Add(await _cardRepository.Get((int)moveCards.ElementAt(i).CardId));
                 }
             }
             return cards;
@@ -294,7 +301,6 @@ namespace BusinessLogicLayer.Service
         #region DealCardToPlayer
         public async Task<GameViewModel> DealCardToPlayer(User user, int gameId)
         {
-            var game = await _gameRepository.Get(gameId);
             var deckFromCache = _deckProvider.Get();
             var rounds = await _roundRepository.Get(x => x.GameId == gameId);
             var movesAtCurrentRound = await _moveRepository.Get(x => x.RoundId == rounds.Last().Id);
@@ -308,7 +314,7 @@ namespace BusinessLogicLayer.Service
                 Users = Mapper.Map<List<UserViewModel>>(await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId)))
             };
 
-            if (movesAtCurrentRound.Where(x => x.IsWin != null).Any(x => x.User.Id == user.Id))
+            if (movesAtCurrentRound.Where(x => x.IsWin != null).Any(x => x.UserId == user.Id))
             {
                 return result;
             }
@@ -319,11 +325,9 @@ namespace BusinessLogicLayer.Service
                 await _moveRepository.Create(move);
                 await _moveCardsRepository.Create(new MoveCards { CardId = deckFromCache.Cards.Last().Id, MoveId = move.Id });
                 deckFromCache.Cards.Remove(deckFromCache.Cards.Last());
-                //move.Cards.AddRange(user.Cards);
-                //game.Rounds.Last().Moves.Add(move);
             }
 
-            if (await IsBust(move))
+            if (await IsBust(user, rounds.Last().Id))
             {
                 move.IsWin = false;
                 await _moveRepository.Update(move);
@@ -334,42 +338,52 @@ namespace BusinessLogicLayer.Service
         }
         #endregion
 
-        //#region DealCardToDealer
-        //public async Task<GameViewModel> DealCardToDealer(int gameId)
-        //{
-        //    var game = await _gameRepository.Get(gameId);
-        //    var deckFromCache = _deckProvider.Get();
-        //    game.Deck = deckFromCache.Cards;
-        //    game.DiscardPile = deckFromCache.DiscardPile;
-        //    var dealer = game.Users.FirstOrDefault(x => x.UserRole == UserRole.Dealer);
+        #region DealCardToDealer
+        public async Task<GameViewModel> DealCardToDealer(int gameId)
+        {
+            var game = await _gameRepository.Get(gameId);
+            var deckFromCache = _deckProvider.Get();
+            var userGames = await _userGamesRepository.Get(x => x.GameId == gameId);
+            var users = await UsergamesToUsers(userGames);
+            var dealer = users.FirstOrDefault(x => x.UserRole == UserRole.Dealer);
+            var rounds = await _roundRepository.Get(x => x.GameId == gameId);
+            var move = new Move();
+            var result = new GameViewModel
+            {
+                Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards),
+                DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile),
+                IsOver = false,
+                Rounds = Mapper.Map<List<RoundViewModel>>(rounds),
+                Users = Mapper.Map<List<UserViewModel>>(await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId)))
+            };
 
-        //    if(dealer.Cards.Sum(x => x.CardValue) > 17)
-        //    {
-        //        return Mapper.Map<GameViewModel>(game);
-        //    }
+            if (dealer.Cards.Sum(x => x.CardValue) > 17) //doesnot work
+            {
+                return result;
+            }
 
-        //    dealer.Cards.Add(game.Deck.Last());
-        //    game.Deck.Remove(game.Deck.Last());
-        //    game.Rounds.Last().Moves.Add(new Move { Cards = dealer.Cards, User = dealer, Round = game.Rounds.Last() });
+            move = new Move { UserId = dealer.Id, RoundId = rounds.Last().Id };
+            await _moveRepository.Create(move);
+            await _moveCardsRepository.Create(new MoveCards { CardId = deckFromCache.Cards.Last().Id, MoveId = move.Id });
+            deckFromCache.Cards.Remove(deckFromCache.Cards.Last());
 
-        //    _deckProvider.Update(new Deck { Cards = game.Deck, DiscardPile = new List<Card>() });
-        //    await _gameRepository.Update(game);
+            _deckProvider.Update(new Deck { Cards = deckFromCache.Cards, DiscardPile = deckFromCache.DiscardPile });
+            await _gameRepository.Update(game);
 
-        //    if(GameIsOver(game))
-        //    {
-        //        var result = Mapper.Map<GameViewModel>(game);
-        //        result.IsOver = true;
-        //        return result;
-        //    }
+            if (await GameIsOver(game))
+            {
+                result.IsOver = true;
+                return result;
+            }
 
-        //    if(RoundIsOver(game))
-        //    {
-        //        var result = await CreateNewRound(game.Id);
-        //        return result;
-        //    }
-        //    return Mapper.Map<GameViewModel>(game);
-        //}
-        //#endregion
+            if (await RoundIsOver(game))
+            {
+                await CreateNewRound(game.Id);
+                return result;
+            }
+            return result;
+        }
+        #endregion
 
         //#region DealCardToBots
         //public async Task<GameViewModel> DealCardToBots(int gameId)
