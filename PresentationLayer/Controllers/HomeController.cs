@@ -25,7 +25,7 @@ namespace PresentationLayer.Controllers
             using (GameContext db = new GameContext())
             {
                 var user = db.Users.FirstOrDefault(x => x.Nickname == "ass228");
-                var service = new GameService(new GameRepository(db), new CardRepository(db), new RoundRepository(db), new MoveRepository(db), new MoveCardsRepository(db), new UserGamesRepository(db), new UserRepository(db));
+                var service = new GameService(new GameRepository(db), new CardRepository(db), new RoundRepository(db), new MoveRepository(db), new MoveCardsRepository(db), new UserGamesRepository(db), new UserRepository(db), new UserRoundRepository(db));
                 await service.DealCardToPlayer(user, 1);
                 await service.DealCardToPlayer(user, 1);
                 await service.DealCardToPlayer(user, 1);
@@ -34,6 +34,21 @@ namespace PresentationLayer.Controllers
                 await service.DealCardToPlayer(user, 1);
                 await service.DealCardToPlayer(user, 1);
                 await service.DealCardToPlayer(user, 1);
+                await service.DealCardToBots(1);
+                await service.DealCardToBots(1);
+                await service.DealCardToBots(1);
+                await service.DealCardToBots(1);
+                await service.DealCardToBots(1);
+                await service.DealCardToBots(1);
+                await service.DealCardToBots(1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToDealer(1);
+                await service.DealCardToDealer(1);
             }
             return View();
         }
@@ -44,7 +59,7 @@ namespace PresentationLayer.Controllers
             using (GameContext db = new GameContext())
             {
                 var user = new User { UserRole = UserRole.PeoplePlayer, Nickname = "ass228" };
-                var service = new GameService(new GameRepository(db), new CardRepository(db), new RoundRepository(db), new MoveRepository(db), new MoveCardsRepository(db), new UserGamesRepository(db), new UserRepository(db));
+                var service = new GameService(new GameRepository(db), new CardRepository(db), new RoundRepository(db), new MoveRepository(db), new MoveCardsRepository(db), new UserGamesRepository(db), new UserRepository(db), new UserRoundRepository(db));
                 await service.CreateNewGame(user, 3, 5);
                 await service.DealCards(1);
             }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EntitiesLayer.Entities;
 
-namespace EntitiesLayer.Entities
+namespace BusinessLogicLayer.DTOs
 {
     public class Deck
     {

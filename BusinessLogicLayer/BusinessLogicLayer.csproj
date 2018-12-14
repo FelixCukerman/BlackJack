@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\Deck.cs" />
+    <Compile Include="DTOs\HandCards.cs" />
     <Compile Include="Interfaces\ICardService.cs" />
     <Compile Include="Interfaces\IGameService.cs" />
     <Compile Include="Interfaces\IMoveService.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\DeckProvider.cs" />
+    <Compile Include="Providers\HandCardsProvider.cs" />
     <Compile Include="Service\CardService.cs" />
     <Compile Include="Service\GameService.cs" />
     <Compile Include="Service\MapperService.cs" />

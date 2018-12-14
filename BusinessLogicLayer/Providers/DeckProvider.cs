@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
 using EntitiesLayer.Entities;
+using BusinessLogicLayer.DTOs;
 
 namespace BusinessLogicLayer.Providers
 {

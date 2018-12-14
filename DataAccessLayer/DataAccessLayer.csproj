@@ -59,6 +59,7 @@
     <Compile Include="Interfaces\IRoundRepository.cs" />
     <Compile Include="Interfaces\IUserGamesRepository.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
+    <Compile Include="Interfaces\IUserRoundRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CardRepository.cs" />
     <Compile Include="Repositories\GameRepository.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Repositories\RoundRepository.cs" />
     <Compile Include="Repositories\UserGamesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\UserRoundRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

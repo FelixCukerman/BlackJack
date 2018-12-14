@@ -14,7 +14,19 @@ namespace DataAccessLayer
     {
         protected override void Seed(GameContext context)
         {
-            context.Cards.AddRange(new Deck().Cards);
+            List<Card> cards = new List<Card>();
+            for (int i = 1; i < 5; i++)
+            {
+                for (int j = (int)CardName.Two; j < (int)CardName.Ten + 1; j++)
+                {
+                    cards.Add(new Card { Suit = (Suit)i, CardName = (CardName)j, CardValue = j });
+                }
+                cards.Add(new Card { Suit = (Suit)i, CardName = CardName.Jack, CardValue = 10 });
+                cards.Add(new Card { Suit = (Suit)i, CardName = CardName.Queen, CardValue = 10 });
+                cards.Add(new Card { Suit = (Suit)i, CardName = CardName.King, CardValue = 10 });
+                cards.Add(new Card { Suit = (Suit)i, CardName = CardName.Ace, CardValue = 11 });
+            }
+            context.Cards.AddRange(cards);
             context.SaveChanges();
         }
     }
