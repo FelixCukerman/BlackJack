@@ -17,6 +17,8 @@ namespace EntitiesLayer.Entities
         public UserRole UserRole { get; set; }
         [NotMapped]
         public List<Card> Cards { get; set; }
+        [Required]
+        public int Cash { get; set; }
 
         public User()
         {
@@ -24,6 +26,7 @@ namespace EntitiesLayer.Entities
             Nickname = "default";
             UserRole = UserRole.None;
             Cards = new List<Card>();
+            Cash = 5;
         }
     }
 

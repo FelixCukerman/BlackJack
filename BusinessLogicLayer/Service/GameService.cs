@@ -61,6 +61,14 @@ namespace BusinessLogicLayer.Service
         }
         #endregion
 
+        #region PutOutFromDiscardPileToDeck
+        private void PutOutFromDiscardPileToDeck(Deck deck)
+        {
+            deck.Cards.AddRange(deck.DiscardPile);
+            deck.DiscardPile.RemoveRange(0, deck.DiscardPile.Count);
+        }
+        #endregion
+
         #region CheckDeck
         private Deck CheckDeck(Deck deck)
         {
@@ -111,6 +119,7 @@ namespace BusinessLogicLayer.Service
         }
         #endregion
 
+        #region IsMoreThan17Points
         private async Task<bool> IsMoreThan17Points(User user, int roundId)
         {
             var moveCards = new List<MoveCards>();
@@ -127,6 +136,18 @@ namespace BusinessLogicLayer.Service
                 return true;
             }
             return false;
+        }
+        #endregion
+
+        private async Task<List<int>> CalculatePoints(Round round)
+        {
+            var moves = await _moveRepository.Get(x => x.RoundId == round.Id);
+            var moveCards = new List<MoveCards>();
+
+            for(int i = 0; i < moves.Count(); i++)
+            {
+                moveCards.AddRange(await _moveCardsRepository.Get(x => x.MoveId == moves.ElementAt(i).Id));
+            }
         }
 
         #region RoundIsOver
@@ -273,12 +294,18 @@ namespace BusinessLogicLayer.Service
         #region CreateNewRound
         private async Task<Round> CreateNewRound(int gameId)
         {
+            var deckFromCache = _deckProvider.Get();
             var game = await _gameRepository.Get(gameId);
             var round = new Round { Game = game };
             await _roundRepository.Create(round);
             var users = await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId));
             var userRounds = new List<UserRound>();
             
+            if(deckFromCache.Cards.Count < 15)
+            {
+                PutOutFromDiscardPileToDeck(deckFromCache);
+            }
+
             for(int i = 0; i < users.Count; i++)
             {
                 userRounds.Add(new UserRound { RoundId = round.Id, UserId = users[i].Id });
@@ -290,11 +317,14 @@ namespace BusinessLogicLayer.Service
         }
         #endregion
 
-        private async Task PlaceABet(UserRound userRound, int rate)
+        #region PlaceABet
+        public async Task PlaceABet(int userId, int roundId, int rate)
         {
+            UserRound userRound = (await _userRoundRepository.Get(x => x.RoundId == roundId && x.UserId == userId)).FirstOrDefault();
             userRound.Rate = rate;
             await _userRoundRepository.Update(userRound);
         }
+        #endregion
 
         #region SetCardsToUserFromCache
         private void SetCardsToUserFromCache(List<User> users)
@@ -478,7 +508,6 @@ namespace BusinessLogicLayer.Service
             var move = new Move();
             var userRounds = await _userRoundRepository.Get(x => x.RoundId == rounds.Last().Id);
             var bots = users.Where(x => x.UserRole == UserRole.BotPlayer);
-
             var userRoundsToUpdate = new List<UserRound>();
 
             for (int i = 0; i < bots.Count(); i++)
@@ -501,11 +530,13 @@ namespace BusinessLogicLayer.Service
 
                 if (await IsBust(item, rounds.Last().Id))
                 {
-                    userRoundsToUpdate.Add(userRounds.FirstOrDefault(x => x.UserId == bots.ElementAt(i).Id));
+                    var busted = userRounds.FirstOrDefault(x => x.UserId == item.Id);
+                    busted.IsWin = false;
+                    userRoundsToUpdate.Add(busted);
                 }
             }
 
-            await _userRoundRepository.UpdateRange(userRoundsToUpdate); //На этом остановился
+            await _userRoundRepository.UpdateRange(userRoundsToUpdate);
             _deckProvider.Update(new Deck { Cards = deckFromCache.Cards, DiscardPile = deckFromCache.DiscardPile });
 
             var result = new GameViewModel
@@ -520,13 +551,5 @@ namespace BusinessLogicLayer.Service
             return result;
         }
         #endregion
-
-        //#region GameHistory
-        //public async Task<GameHistoryViewModel> GameHistory(int gameId)
-        //{
-        //    var game = await _gameRepository.Get(gameId);
-        //    return Mapper.Map<GameHistoryViewModel>(game);
-        //}
-        //#endregion
     }
 }

@@ -43,12 +43,11 @@ namespace DataAccessLayer.Repositories
             data.Entry(userRound).State = EntityState.Modified;
             await data.SaveChangesAsync();
         }
-        public async Task UpdateRange(IEnumerable<UserRound> userRounds)
+        public async Task UpdateRange(IEnumerable<UserRound> userRounds) //доделать потом
         {
-            var userRoundList = userRounds.ToList();
             for (int i = 0; i < userRounds.Count(); i++)
             {
-                data.Entry(userRoundList[i]).State = EntityState.Modified;
+                data.Entry(userRounds.ElementAt(i)).State = EntityState.Modified;
             }
             await data.SaveChangesAsync();
         }
