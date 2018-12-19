@@ -17,6 +17,9 @@ namespace EntitiesLayer.Entities
         public int? UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
+        public int CardId { get; set; }
+        [ForeignKey("CardId")]
+        public Card Card { get; set; }
 
         public Move()
         {

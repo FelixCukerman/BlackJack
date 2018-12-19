@@ -53,7 +53,6 @@
     <Compile Include="GameContext.cs" />
     <Compile Include="Interfaces\ICardRepository.cs" />
     <Compile Include="Interfaces\IGameRepository.cs" />
-    <Compile Include="Interfaces\IMoveCardsRepository.cs" />
     <Compile Include="Interfaces\IMoveRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IRoundRepository.cs" />
@@ -64,7 +63,6 @@
     <Compile Include="Repositories\CardRepository.cs" />
     <Compile Include="Repositories\GameRepository.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
-    <Compile Include="Repositories\MoveCardsRepository.cs" />
     <Compile Include="Repositories\MoveRepository.cs" />
     <Compile Include="Repositories\RoundRepository.cs" />
     <Compile Include="Repositories\UserGamesRepository.cs" />

@@ -22,10 +22,6 @@ namespace BusinessLogicLayer.Service
             .ForMember(x => x.User, x => x.MapFrom(m => m.User))
             .ForMember(x => x.Cards, x => x.Ignore());
 
-            CreateMap<Round, RoundViewModel>()
-            .ForMember(x => x.Moves, x => x.Ignore())
-            .ForMember(x => x.IsOver, x => x.Ignore());
-
             CreateMap<User, UserViewModel>()
             .ForMember(x => x.Nickname, x => x.MapFrom(m => m.Nickname))
             .ForMember(x => x.UserRole, x => x.MapFrom(m => m.UserRole))
