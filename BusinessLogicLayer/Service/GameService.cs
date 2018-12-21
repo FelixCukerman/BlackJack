@@ -198,8 +198,8 @@ namespace BusinessLogicLayer.Service
             {
                 Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards),
                 DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile),
-                Rounds = Mapper.Map<List<RoundViewModel>>(await RoundMapper(rounds)),
-                Users = Mapper.Map<List<UserViewModel>>(users)
+                Rounds = await RoundMapper(rounds),
+                Users = Mapper.Map<List<UserViewModel>>(users) //+карты на руках
             };
         }
 
@@ -209,7 +209,7 @@ namespace BusinessLogicLayer.Service
             for(int i = 0; i < rounds.Count(); i++)
             {
                 var moves = await _moveRepository.Get(x => x.RoundId == rounds.ElementAt(i).Id);
-                result.Add(new RoundViewModel { Moves = await MoveMapper(moves)});
+                result.Add(new RoundViewModel { Moves = await MoveMapper(moves) });
             }
             return result;
         }
@@ -232,12 +232,12 @@ namespace BusinessLogicLayer.Service
             var userId = move.UserId;
             var user = await _userRepository.Get((int)userId);
             var card = await _cardRepository.Get(move.CardId);
-            result.Add(new MoveViewModel { Card = Mapper.Map<CardViewModel>(card), User = Mapper.Map<UserViewModel>(user) });
 
             return new MoveViewModel
             {
-                Card = 
-            }
+                Card = Mapper.Map<CardViewModel>(card),
+                User = Mapper.Map<UserViewModel>(user)
+            };
         }
 
         #region UsersToUserrounds
@@ -361,14 +361,15 @@ namespace BusinessLogicLayer.Service
                 users.Add(await _userRepository.Get(userGames.ElementAt(i).User.Id));
             }
 
-            GameViewModel result = new GameViewModel
-            {
-                Deck = Mapper.Map<List<CardViewModel>>(cards.ToList()),
-                DiscardPile = new List<CardViewModel>(),
-                IsOver = false,
-                Rounds = Mapper.Map<List<RoundViewModel>>(await _roundRepository.Get(x => x.GameId == game.Id)),
-                Users = Mapper.Map<List<UserViewModel>>(users)
-            };
+            GameViewModel result = await GameMapper(game.Id);
+            //GameViewModel result = new GameViewModel
+            //{
+            //    Deck = Mapper.Map<List<CardViewModel>>(cards.ToList()),
+            //    DiscardPile = new List<CardViewModel>(),
+            //    IsOver = false,
+            //    Rounds = Mapper.Map<List<RoundViewModel>>(await _roundRepository.Get(x => x.GameId == game.Id)),
+            //    Users = Mapper.Map<List<UserViewModel>>(users)
+            //};
 
             return result;
 
@@ -413,7 +414,7 @@ namespace BusinessLogicLayer.Service
         #region DealCards
         public async Task<GameViewModel> DealCards(int gameId)
         {
-            var result = new GameViewModel();
+            var result = await GameMapper(gameId);
             var deckFromCache = _deckProvider.Get();
             var cardToUser = new List<Card>();
             var move = new Move();
@@ -453,10 +454,10 @@ namespace BusinessLogicLayer.Service
                 await SetLoserMoves(userRounds);
             }
 
-            result.Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards);
-            result.DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile);
-            result.Rounds = Mapper.Map<List<RoundViewModel>>(rounds);
-            result.Users = Mapper.Map<List<UserViewModel>>(users);
+            //result.Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards);
+            //result.DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile);
+            //result.Rounds = Mapper.Map<List<RoundViewModel>>(rounds);
+            //result.Users = Mapper.Map<List<UserViewModel>>(users);
 
             return result;
         }
@@ -470,14 +471,7 @@ namespace BusinessLogicLayer.Service
             var movesAtCurrentRound = await _moveRepository.Get(x => x.RoundId == rounds.Last().Id);
             var move = new Move();
             var userRounds = await _userRoundRepository.Get(x => x.UserId == user.Id && x.RoundId == rounds.Last().Id);
-            var result = new GameViewModel
-            {
-                Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards),
-                DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile),
-                IsOver = false,
-                Rounds = Mapper.Map<List<RoundViewModel>>(rounds),
-                Users = Mapper.Map<List<UserViewModel>>(await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId)))
-            };
+            var result = await GameMapper(gameId);
 
             if (userRounds.FirstOrDefault().IsWin != null)
             {
@@ -538,7 +532,6 @@ namespace BusinessLogicLayer.Service
 
             move = new Move { UserId = dealer.Id, RoundId = rounds.Last().Id, CardId = deckFromCache.Cards.Last().Id };
             await _moveRepository.Create(move);
-            result.Rounds.Last().Moves.Add(await MoveMapper());
             deckFromCache.Cards.Remove(deckFromCache.Cards.Last());
 
             _deckProvider.Update(new Deck { Cards = deckFromCache.Cards, DiscardPile = deckFromCache.DiscardPile });
@@ -555,6 +548,9 @@ namespace BusinessLogicLayer.Service
                 result.IsOver = true;
                 return result;
             }
+            result.Rounds.Last().Moves.Add(await MoveMapper(move));
+            result.Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards);
+            result.DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile);
             return result;
         }
         #endregion
@@ -599,14 +595,15 @@ namespace BusinessLogicLayer.Service
             await _userRoundRepository.UpdateRange(userRoundsToUpdate);
             _deckProvider.Update(new Deck { Cards = deckFromCache.Cards, DiscardPile = deckFromCache.DiscardPile });
 
-            var result = new GameViewModel
-            {
-                Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards),
-                DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile),
-                IsOver = false,
-                Rounds = Mapper.Map<List<RoundViewModel>>(rounds),
-                Users = Mapper.Map<List<UserViewModel>>(await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId)))
-            };
+            var result = await GameMapper(gameId);
+            //var result = new GameViewModel
+            //{
+            //    Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards),
+            //    DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile),
+            //    IsOver = false,
+            //    Rounds = Mapper.Map<List<RoundViewModel>>(rounds),
+            //    Users = Mapper.Map<List<UserViewModel>>(await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId)))
+            //};
 
             return result;
         }

@@ -20,7 +20,7 @@ namespace BusinessLogicLayer.Service
 
             CreateMap<Move, MoveViewModel>()
             .ForMember(x => x.User, x => x.MapFrom(m => m.User))
-            .ForMember(x => x.Cards, x => x.Ignore());
+            .ForMember(x => x.Card, x => x.Ignore());
 
             CreateMap<User, UserViewModel>()
             .ForMember(x => x.Nickname, x => x.MapFrom(m => m.Nickname))
