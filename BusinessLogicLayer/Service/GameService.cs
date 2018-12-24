@@ -129,28 +129,26 @@ namespace BusinessLogicLayer.Service
         private async Task CalculatePoints(Round round)
         {
             var moves = await _moveRepository.Get(x => x.RoundId == round.Id);
-            var userRounds = await _userRoundRepository.Get(x => x.RoundId == round.Id);
+            var userRounds = await _userRoundRepository.Get(x => x.RoundId == round.Id && x.IsWin == null);
+            var userGames = await _userGamesRepository.Get(x => x.GameId == round.GameId);
+            var users = await UsergamesToUsers(userGames);
             var userRoundsToUpdate = new List<UserRound>();
-            var users = await UserRoundsToUsers(userRounds);
             var dealer = users.FirstOrDefault(x => x.UserRole == UserRole.Dealer);
             var dealerCards = await MovesToCards(moves.Where(x => x.UserId == dealer.Id));
 
-            for (int i = 0; i < users.Count; i++)
+            for (int i = 0; i < userRounds.Count(); i++)
             {
-                if(userRounds.FirstOrDefault(x => x.UserId == users.ElementAt(i).Id).IsWin != null || users.ElementAt(i).UserRole == UserRole.Dealer)
-                {
-                    continue;
-                }
-                var cards = await MovesToCards(moves.Where(x => x.UserId == users.ElementAt(i).Id));
+                var cards = await MovesToCards(moves.Where(x => x.UserId == userRounds.ElementAt(i).UserId));
                 if (cards.Sum(x => x.CardValue) > dealerCards.Sum(x => x.CardValue))
                 {
-                    userRounds.FirstOrDefault(x => x.UserId == users.ElementAt(i).Id).IsWin = true;
+                    userRounds.FirstOrDefault(x => x.UserId == userRounds.ElementAt(i).UserId).IsWin = true;
                 }
                 if (cards.Sum(x => x.CardValue) < dealerCards.Sum(x => x.CardValue))
                 {
-                    userRounds.FirstOrDefault(x => x.UserId == users.ElementAt(i).Id).IsWin = false;
+                    userRounds.FirstOrDefault(x => x.UserId == userRounds.ElementAt(i).UserId).IsWin = false;
                 }
-                userRoundsToUpdate.Add(userRounds.FirstOrDefault(x => x.UserId == users.ElementAt(i).Id));
+                userRoundsToUpdate.Add(userRounds.FirstOrDefault(x => x.UserId == userRounds.ElementAt(i).UserId));
+
             }
             if(userRoundsToUpdate.Count != 0)
             {
@@ -278,6 +276,7 @@ namespace BusinessLogicLayer.Service
                 }
             }
             return users;
+
         }
         #endregion
 
@@ -383,7 +382,7 @@ namespace BusinessLogicLayer.Service
             var game = await _gameRepository.Get(gameId);
             var round = new Round { Game = game };
             await _roundRepository.Create(round);
-            var users = await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId));
+            var users = (await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId))).Where(x => x.UserRole != UserRole.Dealer);
             var userRounds = new List<UserRound>();
 
             if (deckFromCache.Cards.Count < 15)
@@ -391,9 +390,9 @@ namespace BusinessLogicLayer.Service
                 PutOutFromDiscardPileToDeck(deckFromCache);
             }
 
-            for (int i = 0; i < users.Count; i++)
+            for (int i = 0; i < users.Count(); i++)
             {
-                userRounds.Add(new UserRound { RoundId = round.Id, UserId = users[i].Id });
+                userRounds.Add(new UserRound { RoundId = round.Id, UserId = users.ElementAt(i).Id });
             }
 
             await _userRoundRepository.CreateRange(userRounds);
@@ -420,10 +419,9 @@ namespace BusinessLogicLayer.Service
             var move = new Move();
             var moves = new List<Move>();
             var users = await UsergamesToUsers(await _userGamesRepository.Get(x => x.GameId == gameId));
+            var dealer = users.FirstOrDefault(x => x.UserRole == UserRole.Dealer);
             var rounds = await _roundRepository.Get(x => x.GameId == gameId);
             var userRounds = await UsersToUserrounds(users);
-
-            SetCardsToUserFromCache(users);
 
             for (int i = 0; i < users.Count(); i++)
             {
@@ -433,13 +431,16 @@ namespace BusinessLogicLayer.Service
                     deckFromCache.Cards.RemoveRange(deckFromCache.Cards.Count - 2, 2);
                     move = new Move { RoundId = rounds.Last().Id, UserId = users.ElementAt(i).Id, CardId = cardToUser[0].Id };
                     moves.Add(move);
-                    await _moveRepository.Create(move);
+                    move = new Move { RoundId = rounds.Last().Id, UserId = users.ElementAt(i).Id, CardId = cardToUser[1].Id }; //fix this shit
+                    moves.Add(move);
                 }
-                if (await IsBlackJack(moves))
-                {
-                    userRounds.FirstOrDefault(x => x.UserId == users.ElementAt(i).Id).IsWin = true;
-                }
+                //if (await IsBlackJack(moves))
+                //{
+                //    userRounds.FirstOrDefault(x => x.UserId == users.ElementAt(i).Id && x.UserId != dealer.Id).IsWin = true;
+                //}
             }
+
+            await _moveRepository.CreateRange(moves);
             moves.RemoveRange(0, moves.Count);
             cardToUser = deckFromCache.Cards.Skip(deckFromCache.Cards.Count - 2).ToList();
             deckFromCache.Cards.RemoveRange(deckFromCache.Cards.Count - 2, 2);
@@ -449,7 +450,6 @@ namespace BusinessLogicLayer.Service
 
             if (await IsBlackJack(moves))
             {
-                userRounds.FirstOrDefault(x => x.UserId == users.FirstOrDefault(y => y.UserRole == UserRole.Dealer).Id).IsWin = true;
                 result.IsOver = true;
                 await SetLoserMoves(userRounds);
             }
@@ -513,15 +513,30 @@ namespace BusinessLogicLayer.Service
             var rounds = await _roundRepository.Get(x => x.GameId == gameId);
             var move = new Move();
             var userRound = (await _userRoundRepository.Get(x => x.UserId == dealer.Id && x.RoundId == rounds.Last().Id)).FirstOrDefault();
-
-            SetCardsToUserFromCache(users);
-
             var result = await GameMapper(gameId);
 
-            if (userRound.IsWin != null)
-            {
-                return result;
-            }
+            //#region govno
+            //var userRounds = await _userRoundRepository.Get(x => x.RoundId == rounds.Last().Id);
+            //bool a = true;
+
+            //SetCardsToUserFromCache(users);
+
+            ////if (userRound.IsWin != null)
+            ////{
+            ////    return result;
+            ////}
+
+            //for (int i = 0; i < userRounds.Count(); i++)
+            //{
+            //    if (userRounds.ElementAt(i).IsWin != null)
+            //    {
+            //        a = false;
+            //    }
+            //}
+
+            //if (a == false)
+            //    return result;
+            //#endregion
 
             if (await IsMoreThan17Points(dealer, rounds.Last().Id))
             {
@@ -530,6 +545,7 @@ namespace BusinessLogicLayer.Service
                 return result;
             }
 
+
             move = new Move { UserId = dealer.Id, RoundId = rounds.Last().Id, CardId = deckFromCache.Cards.Last().Id };
             await _moveRepository.Create(move);
             deckFromCache.Cards.Remove(deckFromCache.Cards.Last());
@@ -537,17 +553,18 @@ namespace BusinessLogicLayer.Service
             _deckProvider.Update(new Deck { Cards = deckFromCache.Cards, DiscardPile = deckFromCache.DiscardPile });
             await _gameRepository.Update(game);
 
-            if (await IsBust(dealer, rounds.Last().Id))
-            {
-                userRound.IsWin = false;
-                await _userRoundRepository.Update(userRound);
-            }
+            //if (await IsBust(dealer, rounds.Last().Id))
+            //{
+            //    userRound.IsWin = false;
+            //    await _userRoundRepository.Update(userRound);
+            //}
 
             if (await GameIsOver(game))
             {
-                result.IsOver = true;
+                result.Rounds.Last().IsOver = true;
                 return result;
             }
+
             result.Rounds.Last().Moves.Add(await MoveMapper(move));
             result.Deck = Mapper.Map<List<CardViewModel>>(deckFromCache.Cards);
             result.DiscardPile = Mapper.Map<List<CardViewModel>>(deckFromCache.DiscardPile);

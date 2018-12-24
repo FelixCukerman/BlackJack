@@ -26,29 +26,29 @@ namespace PresentationLayer.Controllers
             {
                 var user = db.Users.FirstOrDefault(x => x.Nickname == "ass228");
                 var service = new GameService(new GameRepository(db), new CardRepository(db), new RoundRepository(db), new MoveRepository(db), new UserGamesRepository(db), new UserRepository(db), new UserRoundRepository(db));
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToPlayer(user, 1);
-                await service.DealCardToBots(1);
-                await service.DealCardToBots(1);
-                await service.DealCardToBots(1);
-                await service.DealCardToBots(1);
-                await service.DealCardToBots(1);
-                await service.DealCardToBots(1);
-                await service.DealCardToBots(1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToPlayer(user, 1);
+                //await service.DealCardToBots(1);
+                //await service.DealCardToBots(1);
+                //await service.DealCardToBots(1);
+                //await service.DealCardToBots(1);
+                //await service.DealCardToBots(1);
+                //await service.DealCardToBots(1);
+                //await service.DealCardToBots(1);
                 await service.DealCardToDealer(1);
                 await service.DealCardToDealer(1);
                 await service.DealCardToDealer(1);
                 await service.DealCardToDealer(1);
-                await service.DealCardToDealer(1);
-                await service.DealCardToDealer(1);
-                await service.DealCardToDealer(1);
-                await service.DealCardToDealer(1);
+                //await service.DealCardToDealer(1);
+                //await service.DealCardToDealer(1);
+                //await service.DealCardToDealer(1);
+                //await service.DealCardToDealer(1);
             }
             return View();
         }
